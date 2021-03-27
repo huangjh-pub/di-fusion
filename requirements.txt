@@ -1,0 +1,9 @@
+torch
+open3d==0.11.2
+pyquaternion
+ninja
+opencv-python
+torch_scatter
+tqdm
+tensorboardx
+pyyaml

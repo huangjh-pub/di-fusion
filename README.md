@@ -20,6 +20,7 @@ The data generation step is similar to [DeepSDF](https://github.com/facebookrese
 cd sampler_cuda
 mkdir build; cd build
 cmake ..
+make -j
 ```
 
 This will gives you a binary named `PreprocessMeshCUDA` under the `sampler_cuda/bin/` directory.
@@ -27,55 +28,46 @@ This will gives you a binary named `PreprocessMeshCUDA` under the `sampler_cuda/
 Then run the following script to generate the dataset used for training the encoder-decoder network:
 
 ```bash
-python data_generator.py configs/data/shapenet.yaml
+python data_generator.py configs/data-shapenet.yaml --nproc 4
 ```
 
-The above yaml file is just one example. You should change the `provider_kwargs.shapenet_path` into your downloaded ShapeNet path. You can also change the provider into `` or change the shape categories used for training.
+The above yaml file is just one example. You should change the `provider_kwargs.shapenet_path` into your downloaded ShapeNet path. You can also change the provider into `simple_shape` or change the shape categories/samples/scales used for training. In our case, we observe the network can already provide a good fit even if it is trained solely on the chairs.
 
 ### Train the network
 
 Once the dataset is generated (it should be fast if you enable multi-processing), run the following script to start training.
 
 ```bash
-python train.py
+python network_trainer.py configs/train-cnp.yaml
 ```
 
-The training takes 1-2 days and you can open the tensorboard to monitor the training process.
+The training takes 1-2 days (depends on your GPU and cache speed) and you can open the tensorboard to monitor the training process.
 
 ## Running
 
-Now you can run the SLAM. Given a yaml file, the system automatically determines the GPUs to run on.
+After obtaining the model you can run our fusion pipeline. A sample recording (ICL NUIM) can be downloaded here ([w/ noise](https://drive.google.com/file/d/1InewwdfQEIe6Qaftqxd6Qhvj3KJVGx2x/view?usp=sharing)) or their [official website](https://www.doc.ic.ac.uk/~ahanda/VaFRIC/iclnuim.html).
 
-You can tune the parameters in this yaml file for better performance:
+```bash
+python main.py configs/fusion-lr-kt.yaml --vis 1
+```
 
-- `integrate_interval`:
-- `depth_cut_min`, `depth_cut_max`: define the range of depth observations to be cropped. Unit is meter.
-- `run_async`: 
-- `meshing_interval`:
-- `resolution`:
-- `mapping`:
-  - `bound_min`, `bound_max`:
-  - `voxel_size`:
-  - `prune_min_vox_obs`:
-  - `ignore_count_th`: 
-  - `encoder_count_th`:
-- `tracking`:
-  - `iter_config`: An array defining how the camera pose is optimized. Each element is a dictionary: For example `{"n": 2, "type": [['sdf'], ['rgb', 1]]}`  means to optimize the summation of sdf term and rgb term at the 1st level pyramid for 2 iterations.
-  - `sdf.robust_kernel`, `sdf.robust_k`: 
+Visualization (the `vis` flag) is not necessary but it gives you a better intuition of what is going on. When the GUI is ready (a white window prompts), press `,` on your keyboard to run step-by-step or press `.` to run continuously. The color of the mesh shows uncertainty of the network estimation.
 
-### Example
-
-We provide an example config file to quickly run 
+You can tune the parameters in the configuration yaml file for better tracking and reconstruction performance. Please refer to `configs/fusion-lr-kt.yaml` for the descriptions of the parameters.
 
 ## Notes
 
-- The pytorch extensions in `ext/` will be automatically compiled on first run, so expect a delay before the GUI prompts. If you are experiencing a longer wait than expected, (possibly) please refer to [this issue]().
-- Due to unknown reasons the code does not work well with CUDA 11.
+- The pytorch extensions in `ext/` will be automatically compiled on first run, so expect a delay before the GUI prompts.
+- To boost efficiency we update the mesh for visualization in an incremental way, and this may cause glitches/artifacts in the preview mesh, which can be solved by saving and loading the map later. You may also increase `resolution` (default is only 4 to enable interactive GUI) to get a mesh with better quality.
 
 ## Citation
 
 Please consider citing the following work:
 ```bibtex
-@inproceedings {
+@inproceedings{huang2021difusion,
+  title={DI-Fusion: Online Implicit 3D Reconstruction with Deep Priors},
+  author={Huang, Jiahui and Huang, Shi-Sheng and Song, Haoxuan and Hu, Shi-Min},
+  booktitle={Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition},
+  year={2021}
 }
 ```
