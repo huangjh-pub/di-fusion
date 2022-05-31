@@ -6,7 +6,7 @@ This repository contains the implementation of our CVPR 2021 paper: DI-Fusion: O
 
 ## Introduction
 
-DI-Fusion (Deep Implicit Fusion) is a novel online 3D reconstruction system based on RGB-D streams. It simultaneously localizes the camera and builds a local implicit map parametrized by a deep network. Please refer to our [technical report](http://arxiv.org/abs/2012.05551) for more details.
+DI-Fusion (Deep Implicit Fusion) is a novel online 3D reconstruction system based on RGB-D streams. It simultaneously localizes the camera and builds a local implicit map parametrized by a deep network. Please refer to our [technical report](http://arxiv.org/abs/2012.05551) and [video](https://youtu.be/yxkIQFXQ6rw) for more details.
 
 ## Implementations
 

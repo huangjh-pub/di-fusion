@@ -4,7 +4,6 @@
 - 计图是由清华大学计算机系 [图形学实验室](https://cg.cs.tsinghua.edu.cn/) 推出的一个完全基于动态编译、内部使用创新的元算子和统一计算图的深度学习框架。
 
 - DI-Fusion是一个基于RGBD输入的在线三维重建系统。它的相机定位追踪模块以及地图表示完全基于由深度神经网络建模的局部隐式表示。请进一步参考我们的[ArXiv报告](http://arxiv.org/abs/2012.05551)和[视频](https://youtu.be/yxkIQFXQ6rw)。
-- PyTorch version **available [here](https://github.com/huangjh-pub/di-fusion).**
 
 ## 网络训练
 
