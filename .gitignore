@@ -146,5 +146,5 @@ ScreenCamera_*
 *.lprof
 debug/
 
-sampler_cuda/bin
-sampler_cuda/build
+pytorch/sampler_cuda/bin
+pytorch/sampler_cuda/build
