@@ -148,3 +148,6 @@ debug/
 
 pytorch/sampler_cuda/bin
 pytorch/sampler_cuda/build
+
+jittor/sampler_cuda/bin
+jittor/sampler_cuda/build
