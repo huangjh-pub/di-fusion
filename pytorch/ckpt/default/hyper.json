@@ -1,0 +1,91 @@
+{
+  "run_name": "default",
+  "num_epochs": 300,
+  "batch_size": 64,
+  "batch_split": 1,
+  "samples_per_lif": 4096,
+  "lr_schedule": [
+    {
+      "Type": "Step",
+      "Initial": 0.001,
+      "Interval": 80,
+      "Factor": 0.4
+    },
+    {
+      "Type": "Step",
+      "Initial": 0.001,
+      "Interval": 80,
+      "Factor": 0.4
+    }
+  ],
+  "train_set": [
+    {
+      "data_path": "cached$local://../project_data/lif/shapenet_plivoxs",
+      "augment_rotation": "Y",
+      "num_surface_sample": 128,
+      "surface_format": "xyzn",
+      "augment_noise": [
+        0.025,
+        40.0
+      ]
+    }
+  ],
+  "code_bound": null,
+  "code_length": 29,
+  "network_name": "di_decoder",
+  "network_specs": {
+    "dims": [
+      128,
+      128,
+      128,
+      128
+    ],
+    "dropout": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5
+    ],
+    "dropout_prob": 0.2,
+    "norm_layers": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5
+    ],
+    "latent_in": [
+      3
+    ],
+    "weight_norm": true
+  },
+  "encoder_name": "di_encoder",
+  "encoder_specs": {
+    "per_point_feat": [
+      6,
+      32,
+      64,
+      256
+    ],
+    "bn": {
+      "class": "BatchNorm"
+    },
+    "latent_size": 29
+  },
+  "snapshot_frequency": 100,
+  "additional_snapshots": [
+    50
+  ],
+  "training_loss": {
+    "types": [
+      "neg_log_likelihood",
+      "reg_loss"
+    ],
+    "enforce_minmax": true,
+    "clamping_distance": 0.2,
+    "code_reg_lambda": 0.01
+  }
+}

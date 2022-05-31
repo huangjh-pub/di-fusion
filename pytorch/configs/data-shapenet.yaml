@@ -1,0 +1,16 @@
+provider: shapenet_model
+
+provider_kwargs:
+  shapenet_path: "/dataset/ShapeNetCore.v2"
+  categories: ["03001627", "02871439", "03211117", "04256520", "03636649", "04379243"]
+  shapes_per_category: [100, 100, 100, 100, 100, 100]
+  scale: [1.0, 1.7, 0.6, 1.8, 0.5, 1.5]
+output: "../di-datasets/shapenet_plivoxs"
+
+sample_method: 1
+sampler_var: 0.00015
+sampler_count: 800000
+voxel_size: 0.08
+nn_size: 2.0
+
+nproc: 4

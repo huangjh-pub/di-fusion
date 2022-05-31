@@ -1,0 +1,48 @@
+run_name: "default"
+
+num_epochs: 600
+batch_size: 64
+batch_split: 1
+samples_per_lif: 4096
+min_context_points: 16
+
+lr_schedule:
+  # For decoder parameters
+  - { "Type" : "Step", "Initial" : 0.001, "Interval" : 80, "Factor" : 0.4 }
+  # For encoder parameters
+  - { "Type" : "Step", "Initial" : 0.001, "Interval" : 80, "Factor" : 0.4 }
+
+# Dataset.
+train_set:
+  - { "data_path": "../di-datasets/shapenet_plivoxs", "augment_rotation": 'Y', "num_surface_sample": 128, "augment_noise": [0.025, 40.0] }
+
+# Code specification
+code_bound: null
+code_length: 29
+
+# Decoder specification
+network_name: "di_decoder"
+network_specs:
+  dims: [ 128, 128, 128, 128 ]
+  dropout: [0, 1, 2, 3, 4, 5]
+  dropout_prob: 0.2
+  norm_layers: [0, 1, 2, 3, 4, 5]
+  latent_in: [3]
+  weight_norm: true
+
+# Encoder specification
+encoder_name: "di_encoder"
+encoder_specs:
+  per_point_feat: [ 6, 32, 64, 256 ]
+  bn: {"class": "BatchNorm"}
+
+# Snapshots saving parameters
+snapshot_frequency: 100
+additional_snapshots: [50]
+
+# SDF samples
+training_loss:
+    types: [ "neg_log_likelihood", "reg_loss" ]
+    enforce_minmax: true
+    clamping_distance: 0.2
+    code_reg_lambda: 1.0e-2
