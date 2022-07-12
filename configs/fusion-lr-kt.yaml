@@ -3,8 +3,12 @@ sequence_type: "icl_nuim.ICLNUIMSequence"
 sequence_kwargs:
   path: "../lr_kt0_noise"
   start_frame: 0
-  end_frame: -1                                       # Run all frames
+  end_frame: -1
   first_tq: [-1.4, 1.5, 1.5, 0.0, -1.0, 0.0, 0.0]     # Starting pose
+
+# Saving for texture output
+save: true
+save_path: ../saved
 
 # Network parameters (network structure, etc. will be inherited from the training config)
 training_hypers: "ckpt/default/hyper.json"

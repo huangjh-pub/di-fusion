@@ -10,6 +10,7 @@ from network import utility
 import numpy as np
 from system import map
 import system.tracker
+from pathlib import Path
 
 vis_param = argparse.Namespace()
 vis_param.n_left_steps = 0
@@ -99,6 +100,14 @@ def refresh(vis):
                 # map_mesh.compute_vertex_normals()
                 update_geometry(map_mesh, "mesh_geometry", vis)
 
+        if vis_param.args.save:
+            pc_save_path = Path(vis_param.args.save_path) / "pcd" / f"{vis_param.sequence.frame_id - 1}.ply"
+            pc_save_path.parent.mkdir(exist_ok=True, parents=True)
+            colored_pcd = vis_util.pointcloud(frame_pose @ vis_param.tracker.last_colored_pcd[0].cpu().numpy().astype(float),
+                                              color=vis_param.tracker.last_colored_pcd[1].cpu().numpy().astype(float))
+            o3d.io.write_point_cloud(str(pc_save_path), colored_pcd)
+        
+
     return True
 
 
@@ -153,3 +162,10 @@ if __name__ == '__main__':
                 refresh(None)
         except StopIteration:
             pass
+
+    # Save the current data.
+    if vis_param.args.save:
+        data_save_path = Path(args.save_path)
+        data_save_path.mkdir(parents=True, exist_ok=True)
+        # Save visualizer mesh:
+        o3d.io.write_triangle_mesh(str(data_save_path / "mesh.ply"), vis_param.mesh_geometry[0])

@@ -9,7 +9,7 @@ def p(rel_path):
 
 __COMPILE_VERBOSE = False
 # optimize_flags = {'extra_cflags': ['-O2'], 'extra_cuda_cflags': ['-O2']}
-optimize_flags = {}
+optimize_flags = {'extra_cuda_cflags': ['-Xcompiler -fno-gnu-unique']}
 
 # Load in Marching cubes.
 _marching_cubes_module = load(name='marching_cubes',
